@@ -1,0 +1,40 @@
+<category-information>
+    <category>
+        <id>announcements</id>
+        <names>
+            <zh-CN>公告</zh-CN>
+            <en-US>Announcements</en-US>
+        </names>
+        <category-contents>
+            /announcements/announcements.xml
+        </category-contents>
+    </category>
+    <contents>
+        <content>
+            <link>/announcements/2025/july/1.md</link>
+            <title>全新纷易账号系统登场！</title>
+            <tags>
+                <tag>fas</tag>
+            </tags>
+            <category>announcements</category>
+            <time>1753053660</time>
+            <author>
+                <name>Fenyi Studios</name>
+                <link>https://www.github.com/Fenyi-Studios/</link>
+            </author>
+        </content>
+        <content>
+            <link>/announcements/2025/august/2.md</link>
+            <title>纷易账号系统 2.0.1 新版发布！</title>
+            <tags>
+                <tag>fas</tag>
+            </tags>
+            <category>announcements</category>
+            <time>1753053660</time>
+            <author>
+                <name>Fenyi Studios</name>
+                <link>https://www.github.com/Fenyi-Studios/</link>
+            </author>
+        </content>
+    </contents>
+</category-information>

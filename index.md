@@ -1,3 +1,13 @@
-# 导航页
+<fenyi-document-header>
+    <title>导航页</title>
+    <tags>
+    </tags>
+    <category>uncategorized</category>
+    <time>1755754100</time>
+    <author>
+        <name>Fenyi Studios</name>
+        <link>https://www.github.com/Fenyi-Studios/</link>
+    </author>
+</fenyi-document-header>
 
-[验证码用法](./index.html?doc=verifyCodeUsage) | [公告列表](./index.html?doc=announcements/index)
+尝试点击右上角搜索试试吧！

@@ -4,34 +4,35 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>纷易账号用户帮助文档</title>
-		<script src="/resources/webpage/javascripts/marked.js"></script>
-		<!-- 使用一個對中文更友好的現代字體，例如 Noto Sans TC -->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" />
+		<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+		<!-- 使用一个对简体中文更友好的现代字体 -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" />
+		<script src="https://unpkg.com/pinyin-pro@3.18.2/dist/index.js"></script>
 		<style>
-			/* 應用一個乾淨、現代的字體 */
+			/* 应用一个干净、现代的字体 */
 			body {
-				font-family: "Noto Sans TC", sans-serif;
+				font-family: "Noto Sans SC", sans-serif;
 				margin: 0;
 				background-color: #f4f6f8;
 			}
 
-			/* 主要容器使用 CSS Grid，在桌面上實現兩欄佈局 */
+			/* 主要容器使用 CSS Grid，在桌面上实现两栏布局 */
 			.main-container {
 				display: grid;
-				grid-template-columns: 1fr; /* 默認為手機上的單欄 */
-				gap: 1rem; /* 調整間距以適應手機 */
-				padding: 0; /* 在手機上移除外邊距 */
+				grid-template-columns: 1fr; /* 默认为手机上的单栏 */
+				gap: 1rem; /* 调整间距以适应手机 */
+				padding: 0; /* 在手机上移除外边距 */
 				max-width: 1400px;
 				margin: 0 auto;
 			}
 
 			@media only screen and (min-width: 1024px) {
 				.main-container {
-					grid-template-columns: 280px 1fr; /* 桌面上的側邊欄 + 內容 */
+					grid-template-columns: 280px 1fr; /* 桌面上的侧边栏 + 内容 */
 					gap: 2rem;
 					padding: 2rem;
 				}
-				/* 在桌面上使目錄固定，並將其放在主要內容旁邊 */
+				/* 在桌面上使目录固定，并将其放在主要内容旁边 */
 				#toc-container {
 					position: sticky;
 					top: 7rem;
@@ -39,7 +40,7 @@
 				}
 			}
 
-			/* 目錄側邊欄的樣式 */
+			/* 目录侧边栏的样式 */
 			#toc-container {
 				background-color: #ffffff;
 				border: 1px solid #e0e0e0;
@@ -84,7 +85,7 @@
 				transform: translateX(5px);
 			}
 
-			/* 主要內容區塊的樣式 */
+			/* 主要内容区块的样式 */
 			#content {
 				background-color: #ffffff;
 				border: 1px solid #e0e0e0;
@@ -93,7 +94,34 @@
 				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 			}
 
-			/* 行動裝置專屬樣式 */
+			/* 新增的元数据容器样式 */
+			.metadata-header {
+				border-bottom: 1px solid #e0e0e0;
+				padding-bottom: 1rem;
+				margin-bottom: 2rem;
+			}
+
+			.metadata-header h1 {
+				margin-top: 0;
+				margin-bottom: 0.5rem;
+				font-size: 2.25rem;
+				color: #1a1a1a;
+			}
+
+			.metadata-header p {
+				margin: 0;
+				font-size: 0.9rem;
+				color: #777;
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1rem;
+			}
+
+			.metadata-header p span {
+				white-space: nowrap;
+			}
+
+			/* 移动设备专属样式 */
 			@media only screen and (max-width: 1023px) {
 				#toc-container {
 					padding: 1rem;
@@ -109,25 +137,25 @@
 				}
 			}
 
-			/* 內容預覽視窗的樣式 */
+			/* 内容预览窗口的样式 */
 			#preview-container {
 				display: none;
 				position: absolute;
 				z-index: 1000;
 				width: 300px;
 				height: 300px; /* 固定高度 */
-				overflow-y: auto; /* 啟用垂直滾動條 */
+				overflow-y: auto; /* 启用垂直滚动条 */
 				background-color: #ffffff;
 				border: 1px solid #e0e0e0;
 				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 				border-radius: 0.75rem;
 				padding: 1rem;
-				pointer-events: auto; /* 啟用滑鼠事件，讓用戶可以互動 */
+				pointer-events: auto; /* 启用鼠标事件，让用户可以互动 */
 				transition: opacity 0.2s ease;
 				opacity: 0;
 			}
 
-			/* 調整預覽視窗內部的樣式，以適應完整內容 */
+			/* 调整预览窗口内部的样式，以适应完整内容 */
 			#preview-container h1,
 			#preview-container h2,
 			#preview-container h3,
@@ -152,7 +180,7 @@
 				height: auto;
 			}
 
-			/* 現有樣式針對新佈局進行調整 */
+			/* 现有样式针对新布局进行调整 */
 			#content code {
 				font-family: "Consolas", "Courier New", Courier, monospace, "SimSun";
 				background-color: #f0f0f0;
@@ -173,51 +201,114 @@
 			#content h4,
 			#content h5,
 			#content h6 {
-				scroll-margin-top: 80px; /* 滾動到錨點連結時為固定標題留出偏移量 */
+				scroll-margin-top: 80px; /* 滚动到锚点链接时为固定标题留出偏移量 */
 				color: #2c3e50;
 			}
 
-			/* MDUI 和其他庫的引入 */
+			/* 搜索结果容器的样式，使用 CSS Grid 布局 */
+			#search-results-container {
+				display: none; /* 默认隐藏 */
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 1.5rem;
+				padding: 2rem;
+			}
+
+			/* 搜索结果卡片的样式 */
+			.search-result-card {
+				background-color: #ffffff;
+				border: 1px solid #e0e0e0;
+				border-radius: 0.75rem;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+				padding: 1.5rem;
+				cursor: pointer;
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				min-height: 150px;
+			}
+
+			.search-result-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+			}
+
+			.search-result-card h4 {
+				margin: 0 0 0.5rem 0;
+				color: #007bff;
+				font-size: 1.25rem;
+			}
+
+			.search-result-card .metadata {
+				font-size: 0.9rem;
+				color: #777;
+				display: flex;
+				flex-direction: column;
+				gap: 0.25rem;
+				margin-top: 1rem;
+			}
+
+			#searchDocument::placeholder,
+			#searchDocument::selection {
+				padding-left: 1rem;
+			}
 		</style>
-		<link rel="stylesheet" href="/resources/webpage/mdui/mdui.css" />
-		<link rel="stylesheet" href="/resources/webpage/mdui/mdui-icons.css" />
-		<script src="/resources/webpage/mdui/mdui.js"></script>
-		<link rel="stylesheet" href="/resources/webpage/stylesheets/fenyibox.css" />
+		<link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css" />
+		<script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+		<!-- Filled -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<!-- Outlined -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+		<!-- Rounded -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+		<!-- Sharp -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+		<!-- Two Tone -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Two+Tone" rel="stylesheet" />
+		<link href="/fenyibox.css" rel="stylesheet" />
 	</head>
 	<body>
 		<mdui-top-app-bar>
 			<mdui-button-icon icon="menu"></mdui-button-icon>
-			<mdui-top-app-bar-title>幫助文檔</mdui-top-app-bar-title>
+			<mdui-top-app-bar-title>帮助文档</mdui-top-app-bar-title>
+			<div style="flex-grow: 1"></div>
+			<!-- 新增的搜索框 -->
+			<mdui-search-bar id="search-bar" style="max-width: 400px; --container-color: #f0f8ff">
+				<input type="search" placeholder="搜索文档..." height="100%" style="height: 2.5rem; background: rgba(0, 0, 0, 0.1); border: none; border-radius: 91rem" id="searchDocument" />
+			</mdui-search-bar>
 		</mdui-top-app-bar>
 
 		<div class="main-container">
-			<!-- 目錄的新容器 -->
+			<!-- 目录的新容器 -->
 			<div id="toc-container">
-				<h3>目錄</h3>
+				<h3>目录</h3>
 				<ul id="toc"></ul>
 			</div>
 
-			<!-- 現有的內容容器 -->
+			<!-- 现有的内容容器 -->
 			<div id="content"></div>
+
+			<!-- 新增的搜索结果容器 -->
+			<div id="search-results-container"></div>
 		</div>
 
-		<!-- 新增內容預覽視窗 -->
+		<!-- 新增内容预览窗口 -->
 		<div id="preview-container"></div>
 
 		<script>
 			/**
-			 * Helper function to sanitize the input string to prevent path traversal.
-			 * @param {string} input The filename to sanitize.
-			 * @returns {string} The sanitized filename.
+			 * 辅助函数，用于净化输入字符串以防止路径遍历。
+			 * @param {string} input 文件名。
+			 * @returns {string} 净化后的文件名。
 			 */
 			function sanitizeInput(input) {
 				return input.replace(/[^a-zA-Z0-9_\/-]/g, "");
 			}
 
 			/**
-			 * Helper function to get a query parameter from the URL.
-			 * @param {string} param The name of the parameter.
-			 * @returns {string|null} The value of the parameter or null.
+			 * 辅助函数，用于从URL中获取查询参数。
+			 * @param {string} param 参数名。
+			 * @returns {string|null} 参数值或null。
 			 */
 			function getQueryParam(param) {
 				const urlParams = new URLSearchParams(window.location.search);
@@ -225,29 +316,36 @@
 			}
 
 			/**
-			 * Generates a slug from a given string for use in anchor links.
-			 * @param {string} text The heading text.
-			 * @returns {string} A URL-friendly slug.
+			 * 从给定字符串生成一个用于锚点链接的slug。
+			 * @param {string} text 标题文本。
+			 * @returns {string} 一个URL友好的slug。
 			 */
 			function slugify(text) {
 				return text
 					.toString()
 					.toLowerCase()
-					.replace(/\s+/g, "-") // Replace spaces with -
-					.replace(/[^\w-]+/g, "") // Remove all non-word chars
-					.replace(/--+/g, "-") // Replace multiple - with single -
-					.replace(/^-+/, "") // Trim - from start of text
-					.replace(/-+$/, ""); // Trim - from end of text
+					.replace(/\s+/g, "-") // 将空格替换为-
+					.replace(/[^\w-]+/g, "") // 移除所有非单词字符
+					.replace(/--+/g, "-") // 将多个-替换为单个-
+					.replace(/^-+/, "") // 移除开头的-
+					.replace(/-+$/, ""); // 移除结尾的-
 			}
 
 			const previewContainer = document.getElementById("preview-container");
+			const tocContainer = document.getElementById("toc-container");
+			const contentContainer = document.getElementById("content");
+			const searchResultsContainer = document.getElementById("search-results-container");
+			const searchBar = document.getElementById("search-bar");
 			let hoverTimeout;
+			let allDocuments = []; // 用于存储所有文档元数据
+			let tagMap = new Map(); // 用于快速查找标签名称
+			let categoryMap = new Map(); // 用于快速查找分类名称
 
 			/**
-			 * 顯示內容預覽視窗
-			 * @param {string} docPath The path to the Markdown file.
-			 * @param {number} x The x-coordinate for the preview position.
-			 * @param {number} y The y-coordinate for the preview position.
+			 * 显示内容预览窗口
+			 * @param {string} docPath Markdown文件路径。
+			 * @param {number} x 预览位置的x坐标。
+			 * @param {number} y 预览位置的y坐标。
 			 */
 			function showPreview(docPath, x, y) {
 				fetch(docPath)
@@ -258,87 +356,142 @@
 						return response.text();
 					})
 					.then((markdown) => {
-						// 渲染整個 Markdown 內容到預覽視窗
-						const renderedFullMarkdown = marked.parse(markdown);
+						// 移除文档头部
+						const markdownContent = markdown.replace(/<fenyi-document-header>[\s\S]*?<\/fenyi-document-header>/, "").trim();
+						// 渲染整个 Markdown 内容到预览窗口
+						const renderedFullMarkdown = marked.parse(markdownContent);
 						previewContainer.innerHTML = renderedFullMarkdown;
 
-						// 根據滑鼠位置定位預覽視窗
+						// 根据鼠标位置定位预览窗口
 						const viewportWidth = window.innerWidth;
 						const previewWidth = previewContainer.offsetWidth;
 
-						// 確保預覽視窗不會超出視窗右側
+						// 确保预览窗口不会超出窗口右侧
 						const left = x + previewWidth + 20 > viewportWidth ? x - previewWidth - 20 : x + 20;
 
 						previewContainer.style.left = `${left}px`;
 						previewContainer.style.top = `${y + 20}px`;
 						previewContainer.style.display = "block";
-						// 使用過渡效果顯示
+						// 使用过渡效果显示
 						setTimeout(() => {
 							previewContainer.style.opacity = 1;
 						}, 10);
 					})
 					.catch((error) => {
-						console.error("Error fetching preview:", error);
-						// 隱藏預覽視窗
+						console.error("获取预览失败:", error);
+						// 隐藏预览窗口
 						hidePreview();
 					});
 			}
 
 			/**
-			 * 隱藏內容預覽視窗
+			 * 隐藏内容预览窗口
 			 */
 			function hidePreview() {
 				clearTimeout(hoverTimeout);
 				previewContainer.style.opacity = 0;
-				// 在過渡結束後隱藏元素，以節省資源
+				// 在过渡结束后隐藏元素，以节省资源
 				setTimeout(() => {
 					previewContainer.style.display = "none";
 				}, 200);
 			}
 
 			/**
-			 * Loads and renders the Markdown content, then generates a table of contents and adds preview listeners.
+			 * 载入和渲染Markdown内容，然后生成目录并添加预览监听器。
+			 * @param {string} fileName 要载入的文件名。
 			 */
-			function loadMarkdown() {
-				var fileName = getQueryParam("doc");
-				if (!fileName) {
-					fileName = "index";
-				}
+			function loadMarkdown(fileName) {
+				// 如果是从搜索结果点击，隐藏搜索结果，显示内容
+				searchResultsContainer.style.display = "none";
+				tocContainer.style.display = "block";
+				contentContainer.style.display = "block";
+
 				const sanitizedFileName = sanitizeInput(fileName);
 				if (sanitizedFileName !== fileName) {
-					document.getElementById("content").innerHTML = `<p>錯誤：文檔名稱非法。</p>`;
+					document.getElementById("content").innerHTML = `<p>错误：文档名称非法。</p>`;
 					return;
 				}
 
 				fetch(sanitizedFileName + ".md")
 					.then((response) => {
 						if (!response.ok) {
-							throw new Error("沒有找到該文檔。");
+							throw new Error("没有找到该文档。");
 						}
 						return response.text();
 					})
 					.then((data) => {
-						// Use marked.js to convert Markdown to HTML
-						const renderedMarkdown = marked.parse(data);
-						const contentElement = document.getElementById("content");
-						contentElement.innerHTML = renderedMarkdown;
+						// 步骤 1: 解析文档头部的元数据
+						let header = null;
+						const headerMatch = data.match(/<fenyi-document-header>([\s\S]*?)<\/fenyi-document-header>/);
+						if (headerMatch) {
+							header = headerMatch[1];
+							const parser = new DOMParser();
+							const doc = parser.parseFromString(`<root>${header}</root>`, "application/xml");
 
-						// Generate the Table of Contents (TOC)
+							const title = doc.querySelector("title")?.textContent || "未命名文档";
+							const categoryId = doc.querySelector("category")?.textContent;
+							const categoryName = categoryMap.get(categoryId)?.zh || "无";
+							const tags = Array.from(doc.querySelectorAll("tags tag"))
+								.map((t) => {
+									const tagInfo = tagMap.get(t.textContent);
+									return tagInfo ? tagInfo.zh : "";
+								})
+								.join(", ");
+							const time = doc.querySelector("time")?.textContent;
+							// 修正：将时间细化到小时和分钟
+							const date = time
+								? new Date(parseInt(time) * 1000).toLocaleString("zh-CN", {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+										hour: "2-digit",
+										minute: "2-digit",
+								  })
+								: "未知";
+
+							// 新增：解析作者信息
+							const authorName = doc.querySelector("author name")?.textContent || "未知作者";
+							const authorLink = doc.querySelector("author link")?.textContent || "#";
+
+							// 步骤 2: 动态生成并插入元数据HTML
+							const metadataHtml = `
+                                <div class="metadata-header">
+                                    <h1>${title}</h1>
+                                    <p>
+                                        <span><b>类别：</b>${categoryName}</span>
+                                        <span><b>标签：</b>${tags || "无"}</span>
+                                        <span><b>作者：</b><a href="${authorLink}" class="fenyi-link">${authorName}</a></span>
+                                        <span><b>发布时间：</b>${date}</span>
+                                    </p>
+                                </div>
+                            `;
+							contentContainer.innerHTML = metadataHtml;
+						} else {
+							// 如果没有文档头部，则清空元数据区域
+							contentContainer.innerHTML = "";
+						}
+
+						// 步骤 3: 移除头部，然后渲染正文
+						const markdownContent = data.replace(/<fenyi-document-header>[\s\S]*?<\/fenyi-document-header>/, "").trim();
+						const renderedMarkdown = marked.parse(markdownContent);
+						contentContainer.innerHTML += renderedMarkdown;
+
+						// 步骤 4: 生成目录 (TOC)
 						const tocElement = document.getElementById("toc");
-						tocElement.innerHTML = ""; // Clear any previous TOC
-						const headings = contentElement.querySelectorAll("h1, h2, h3, h4, h5, h6");
+						tocElement.innerHTML = ""; // 清除任何先前的目录
+						const headings = contentContainer.querySelectorAll("h1, h2, h3, h4, h5, h6");
 
 						let tocHtml = "";
 						headings.forEach((heading, index) => {
-							// Create a unique ID for each heading
+							// 为每个标题创建一个唯一的ID
 							const headingId = `toc-heading-${slugify(heading.textContent)}-${index}`;
 							heading.id = headingId;
 
-							// Get the level of the heading (h1, h2, etc.) for styling
+							// 获取标题级别（h1, h2, etc.）以进行样式设置
 							const level = parseInt(heading.tagName.charAt(1));
 
-							// Create the TOC link with appropriate indentation
-							const paddingLeft = (level - 1) * 1.5; // Indent based on heading level
+							// 创建带有适当缩进的目录链接
+							const paddingLeft = (level - 1) * 1.5; // 根据标题级别缩进
 							tocHtml += `
                                 <li>
                                     <a href="#${headingId}" style="padding-left: ${paddingLeft}rem;">${heading.textContent}</a>
@@ -348,12 +501,12 @@
 
 						tocElement.innerHTML = tocHtml;
 
-						// Add MDUI and FenyiBox classes to the rendered elements
-						const links = contentElement.querySelectorAll("a");
+						// 为渲染的元素添加 MDUI 和 FenyiBox 类
+						const links = contentContainer.querySelectorAll("a");
 						links.forEach((link) => {
 							link.classList.add("fenyi-link");
 
-							// 檢查連結是否符合 /user-doc/index.html?doc= 的格式
+							// 检查链接是否符合 /user-doc/index.html?doc= 的格式
 							const url = new URL(link.href);
 							if (url.pathname.endsWith("index.html") && url.searchParams.has("doc")) {
 								const docName = url.searchParams.get("doc");
@@ -363,16 +516,16 @@
 									clearTimeout(hoverTimeout);
 									hoverTimeout = setTimeout(() => {
 										showPreview(docPath, event.clientX, event.clientY);
-									}, 500); // 延遲500毫秒顯示預覽
+									}, 500); // 延迟500毫秒显示预览
 								});
 								link.addEventListener("mouseleave", () => {
-									// 延遲隱藏，但當滑鼠移到預覽框上時會取消
+									// 延迟隐藏，但当鼠标移到预览框上时会取消
 									hoverTimeout = setTimeout(hidePreview, 300);
 								});
 							}
 						});
 
-						// 為預覽框添加事件監聽器，防止在滾動時隱藏
+						// 为预览框添加事件监听器，防止在滚动时隐藏
 						previewContainer.addEventListener("mouseenter", () => {
 							clearTimeout(hoverTimeout);
 						});
@@ -380,25 +533,190 @@
 							hidePreview();
 						});
 
-						const tables = contentElement.querySelectorAll("table");
+						const tables = contentContainer.querySelectorAll("table");
 						tables.forEach((table) => {
 							table.classList.add("mdui-table");
 						});
 					})
 					.catch((error) => {
-						console.error("Error loading the file:", error);
-						document.getElementById("content").innerHTML = `<p>錯誤：${error.message}</p>`;
+						console.error("加载文件失败:", error);
+						document.getElementById("content").innerHTML = `<p>错误：${error.message}</p>`;
 					});
 			}
 
-			// Load the markdown document and generate the TOC when the page loads
-			window.onload = loadMarkdown;
-			/*
-			// Optional: Handle window resize to adjust layout
+			/**
+			 * 处理搜索逻辑
+			 * @param {string} query 搜索关键词
+			 */
+			function handleSearch(query) {
+				if (query.trim() === "") {
+					// 如果搜索框为空，显示目录和内容，隐藏结果
+					searchResultsContainer.style.display = "none";
+					tocContainer.style.display = "block";
+					contentContainer.style.display = "block";
+					// 重新载入初始文档
+					loadMarkdown(getQueryParam("doc") || "index");
+					return;
+				}
+
+				// 隐藏目录和内容，显示搜索结果
+				tocContainer.style.display = "none";
+				contentContainer.style.display = "none";
+				searchResultsContainer.style.display = "grid";
+				searchResultsContainer.innerHTML = ""; // 清空旧的搜索结果
+
+				const lowerCaseQuery = query.toLowerCase();
+				// 修正：使用 pinyinPro.pinyin() 函数，并确保拼音是无空格连接的。
+				const pinyinQuery = pinyinPro.pinyin(lowerCaseQuery, { toneType: "none" }).toLowerCase();
+
+				const filteredDocs = allDocuments.filter((doc) => {
+					const titleMatch = doc.title.toLowerCase().includes(lowerCaseQuery);
+					const categoryMatch = doc.category_name.toLowerCase().includes(lowerCaseQuery);
+					const tagsMatch = doc.tags.some((tag) => tag.name.toLowerCase().includes(lowerCaseQuery) || tag.abbreviations.some((abbr) => abbr.toLowerCase().includes(lowerCaseQuery)));
+
+					// 新增拼音匹配逻辑
+					// 修正：使用 pinyinPro.pinyin()，并确保拼音是无空格连接的。
+					const pinyinTitleMatch = pinyinPro.pinyin(doc.title, { toneType: "none" }).toLowerCase().includes(pinyinQuery);
+					const pinyinCategoryMatch = pinyinPro.pinyin(doc.category_name, { toneType: "none" }).toLowerCase().includes(pinyinQuery);
+					const pinyinTagsMatch = doc.tags.some((tag) => pinyinPro.pinyin(tag.name, { toneType: "none" }).toLowerCase().includes(pinyinQuery) || tag.abbreviations.some((abbr) => pinyinPro.pinyin(abbr, { toneType: "none" }).toLowerCase().includes(pinyinQuery)));
+
+					return titleMatch || categoryMatch || tagsMatch || pinyinTitleMatch || pinyinCategoryMatch || pinyinTagsMatch;
+				});
+
+				if (filteredDocs.length > 0) {
+					filteredDocs.forEach((doc) => {
+						const resultCard = document.createElement("div");
+						resultCard.className = "search-result-card";
+
+						const date = new Date(parseInt(doc.time) * 1000); // 将 Unix timestamp 转换为日期
+						// 修正：将时间细化到小时和分钟
+						const formattedDate = date.toLocaleString("zh-CN", {
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						});
+
+						resultCard.innerHTML = `
+                            <h4>${doc.title}</h4>
+                            <div class="metadata">
+                                <span><b>类别：</b> ${doc.category_name}</span>
+                                <span><b>标签：</b> ${doc.tags.map((t) => t.name).join(", ")}</span>
+                                <span><b>作者：</b> <a href="${doc.author_link}" class="fenyi-link">${doc.author_name}</a></span>
+                                <span><b>发布时间：</b> ${formattedDate}</span>
+                            </div>
+                        `;
+						// 点击事件，载入对应的文档
+						resultCard.addEventListener("click", () => {
+							const docPath = doc.link.replace(".md", "").substring(1);
+							loadMarkdown(docPath);
+						});
+						searchResultsContainer.appendChild(resultCard);
+					});
+				} else {
+					searchResultsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">没有找到相关结果。</p>';
+				}
+			}
+
+			/**
+			 * 载入并解析所有文档元数据
+			 */
+			async function loadMetadata() {
+				try {
+					const contentsResponse = await fetch("contents.xml");
+					if (!contentsResponse.ok) throw new Error("Failed to load contents.xml");
+					const contentsXmlText = await contentsResponse.text();
+					const parser = new DOMParser();
+					const contentsDoc = parser.parseFromString(contentsXmlText, "application/xml");
+
+					// 解析标签
+					const tags = contentsDoc.querySelectorAll("tag");
+					tags.forEach((tag) => {
+						const id = tag.querySelector("id").textContent;
+						const zhName = tag.querySelector("names > zh-CN").textContent;
+						const enName = tag.querySelector("names > en-US").textContent;
+						const abbrs = Array.from(tag.querySelectorAll("abbreviations abbr")).map((abbr) => abbr.textContent);
+						tagMap.set(id, { zh: zhName, en: enName, abbrs: abbrs });
+					});
+
+					// 解析分类并载入其内容
+					const categories = contentsDoc.querySelectorAll("category");
+					for (const category of categories) {
+						const id = category.querySelector("id").textContent;
+						const zhName = category.querySelector("names > zh-CN").textContent;
+						const enName = category.querySelector("names > en-US").textContent;
+						const contentLink = category.querySelector("category-contents").textContent;
+
+						categoryMap.set(id, { zh: zhName, en: enName });
+
+						const contentResponse = await fetch(contentLink);
+						if (!contentResponse.ok) throw new Error(`Failed to load ${contentLink}`);
+						const contentXmlText = await contentResponse.text();
+						const contentDoc = parser.parseFromString(contentXmlText, "application/xml");
+
+						const contents = contentDoc.querySelectorAll("content");
+						contents.forEach((content) => {
+							const docData = {
+								link: content.querySelector("link").textContent,
+								title: content.querySelector("title").textContent,
+								time: content.querySelector("time").textContent,
+								category: id,
+								category_name: zhName, // 简化为中文名
+								// 新增：解析作者信息
+								author_name: content.querySelector("author name")?.textContent || "未知作者",
+								author_link: content.querySelector("author link")?.textContent || "#",
+								tags: Array.from(content.querySelectorAll("tags tag")).map((t) => {
+									const tagId = t.textContent;
+									const tagInfo = tagMap.get(tagId);
+									return {
+										id: tagId,
+										name: tagInfo ? tagInfo.zh : "",
+										abbreviations: tagInfo ? tagInfo.abbrs : [],
+									};
+								}),
+							};
+							allDocuments.push(docData);
+						});
+					}
+					// 根据时间戳排序，从新到旧
+					allDocuments.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+					console.log("元数据加载和排序成功。");
+				} catch (error) {
+					console.error("加载元数据失败:", error);
+					// 使用自定义模态框或消息而非 alert
+					const message = "加载文件元数据失败，部分功能可能无法使用。";
+					// 假设有一个显示消息的函数
+					// showMessage(message);
+				}
+			}
+
+			// 页面加载时载入markdown文档并生成目录
+			window.onload = async () => {
+				await loadMetadata();
+				// 检查 URL中是否有 doc 参数，如果有，载入对应文档，否则载入 index.md
+				const initialDoc = getQueryParam("doc") || "index";
+				loadMarkdown(initialDoc);
+
+				// 为搜索栏添加事件监听器
+				searchBar.querySelector("input").addEventListener("input", (event) => {
+					handleSearch(event.target.value);
+				});
+
+				// 为预览框添加事件监听器，防止在滚动时隐藏
+				previewContainer.addEventListener("mouseenter", () => {
+					clearTimeout(hoverTimeout);
+				});
+				previewContainer.addEventListener("mouseleave", () => {
+					hidePreview();
+				});
+			};
+
+			// 可选：处理窗口大小调整以调整布局
 			window.addEventListener("resize", () => {
-				// This is where you would handle more complex responsive logic if needed,
-				// but CSS Grid handles most of it now.
-			});*/
+				// 如果需要，可以在这里处理更复杂的响应式逻辑，
+				// 但 CSS Grid 现在已经处理了大部分。
+			});
 		</script>
 	</body>
 </html>

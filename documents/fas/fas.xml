@@ -1,0 +1,28 @@
+<category-information>
+    <category>
+        <id>fas</id>
+        <names>
+            <zh-CN>纷易账号系统</zh-CN>
+            <en-US>Fenyi Account System</en-US>
+        </names>
+        <category-contents>
+            /documents/fas/fas.xml
+        </category-contents>
+    </category>
+    <contents>
+        <content>
+            <link>/documents/fas/verifyCodeUsage.md</link>
+            <title>验证码使用教程</title>
+            <tags>
+                <tag>fas</tag>
+                <tag>tutorial</tag>
+            </tags>
+            <category>fas</category>
+            <time>1753053660</time>
+            <author>
+                <name>Fenyi Studios</name>
+                <link>https://www.github.com/Fenyi-Studios/</link>
+            </author>
+        </content>
+    </contents>
+</category-information>

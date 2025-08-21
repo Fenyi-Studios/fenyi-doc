@@ -1,0 +1,67 @@
+<contents>
+    <tags>
+        <tag>
+            <id>fas</id>
+            <names>
+                <zh-CN>纷易账号系统</zh-CN>
+                <en-US>Fenyi Account System</en-US>
+            </names>
+            <abbreviations>
+                <abbr>纷易账号</abbr>
+                <abbr>账号系统</abbr>
+                <abbr>账号</abbr>
+                <abbr>FAS</abbr>
+                <abbr>Account</abbr>
+                <abbr>Account System</abbr>
+                <abbr>Fenyi Account</abbr>
+            </abbreviations>
+        </tag>
+        <tag>
+            <id>tutorial</id>
+            <names>
+                <zh-CN>教程</zh-CN>
+                <en-US>Tutorial</en-US>
+            </names>
+            <abbreviations>
+                <abbr>教学</abbr>
+                <abbr>怎么用</abbr>
+                <abbr>how to</abbr>
+                <abbr>how</abbr>
+            </abbreviations>
+        </tag>
+    </tags>
+
+    <categories>
+        <!--
+        <category>
+            <id>none</id>
+            <names>
+                <zh-CN>未分类</zh-CN>
+                <en-US>Uncategorized</en-US>
+            </names>
+            <category-contents>
+                /documents/uncategorized.xml
+            </category-contents>
+        </category>-->
+        <category>
+            <id>announcements</id>
+            <names>
+                <zh-CN>公告</zh-CN>
+                <en-US>Announcements</en-US>
+            </names>
+            <category-contents>
+                /announcements/announcements.xml
+            </category-contents>
+        </category>
+        <category>
+            <id>fas</id>
+            <names>
+                <zh-CN>纷易账号系统</zh-CN>
+                <en-US>Fenyi Account System</en-US>
+            </names>
+            <category-contents>
+                /documents/fas/fas.xml
+            </category-contents>
+        </category>
+    </categories>
+</contents>
