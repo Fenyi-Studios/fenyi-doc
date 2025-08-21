@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="scroll-behavior: smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>纷易账号用户帮助文档</title>
+		<script src="/resources/webpage/javascripts/marked.js"></script>
+		<!-- 使用一個對中文更友好的現代字體，例如 Noto Sans TC -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" />
+		<style>
+			/* 應用一個乾淨、現代的字體 */
+			body {
+				font-family: "Noto Sans TC", sans-serif;
+				margin: 0;
+				background-color: #f4f6f8;
+			}
+
+			/* 主要容器使用 CSS Grid，在桌面上實現兩欄佈局 */
+			.main-container {
+				display: grid;
+				grid-template-columns: 1fr; /* 默認為手機上的單欄 */
+				gap: 1rem; /* 調整間距以適應手機 */
+				padding: 0; /* 在手機上移除外邊距 */
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			@media only screen and (min-width: 1024px) {
+				.main-container {
+					grid-template-columns: 280px 1fr; /* 桌面上的側邊欄 + 內容 */
+					gap: 2rem;
+					padding: 2rem;
+				}
+				/* 在桌面上使目錄固定，並將其放在主要內容旁邊 */
+				#toc-container {
+					position: sticky;
+					top: 7rem;
+					align-self: start;
+				}
+			}
+
+			/* 目錄側邊欄的樣式 */
+			#toc-container {
+				background-color: #ffffff;
+				border: 1px solid #e0e0e0;
+				padding: 1.5rem;
+				border-radius: 0.75rem;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+			}
+
+			#toc-container h3 {
+				margin-top: 0;
+				color: #333;
+				font-size: 1.25rem;
+				font-weight: 700;
+				border-bottom: 2px solid #e0e0e0;
+				padding-bottom: 0.5rem;
+				margin-bottom: 1rem;
+			}
+
+			#toc {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+
+			#toc li {
+				margin-bottom: 0.5rem;
+			}
+
+			#toc a {
+				color: #555;
+				text-decoration: none;
+				font-weight: 500;
+				transition: color 0.2s ease, transform 0.2s ease;
+				display: block;
+				padding: 0.25rem;
+				border-radius: 0.25rem;
+			}
+
+			#toc a:hover {
+				color: #007bff;
+				background-color: #f0f8ff;
+				transform: translateX(5px);
+			}
+
+			/* 主要內容區塊的樣式 */
+			#content {
+				background-color: #ffffff;
+				border: 1px solid #e0e0e0;
+				padding: 2rem;
+				border-radius: 0.75rem;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+			}
+
+			/* 行動裝置專屬樣式 */
+			@media only screen and (max-width: 1023px) {
+				#toc-container {
+					padding: 1rem;
+					border: none;
+					box-shadow: none;
+					border-radius: 0;
+				}
+				#content {
+					padding: 1rem;
+					border: none;
+					box-shadow: none;
+					border-radius: 0;
+				}
+			}
+
+			/* 內容預覽視窗的樣式 */
+			#preview-container {
+				display: none;
+				position: absolute;
+				z-index: 1000;
+				width: 300px;
+				height: 300px; /* 固定高度 */
+				overflow-y: auto; /* 啟用垂直滾動條 */
+				background-color: #ffffff;
+				border: 1px solid #e0e0e0;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+				border-radius: 0.75rem;
+				padding: 1rem;
+				pointer-events: auto; /* 啟用滑鼠事件，讓用戶可以互動 */
+				transition: opacity 0.2s ease;
+				opacity: 0;
+			}
+
+			/* 調整預覽視窗內部的樣式，以適應完整內容 */
+			#preview-container h1,
+			#preview-container h2,
+			#preview-container h3,
+			#preview-container h4 {
+				color: #2c3e50;
+				margin-top: 0.5em;
+			}
+			#preview-container p {
+				font-size: 0.9rem;
+				color: #555;
+			}
+
+			#preview-container code {
+				font-family: "Consolas", "Courier New", Courier, monospace, "SimSun";
+				background-color: #f0f0f0;
+				border-radius: 0.25rem;
+				padding: 0.25rem 0.5rem;
+			}
+
+			#preview-container img {
+				max-width: 100%;
+				height: auto;
+			}
+
+			/* 現有樣式針對新佈局進行調整 */
+			#content code {
+				font-family: "Consolas", "Courier New", Courier, monospace, "SimSun";
+				background-color: #f0f0f0;
+				border-radius: 0.25rem;
+				padding: 0.25rem 0.5rem;
+			}
+
+			#content img {
+				max-width: 100%;
+				height: auto;
+				border-radius: 0.5rem;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			#content h1,
+			#content h2,
+			#content h3,
+			#content h4,
+			#content h5,
+			#content h6 {
+				scroll-margin-top: 80px; /* 滾動到錨點連結時為固定標題留出偏移量 */
+				color: #2c3e50;
+			}
+
+			/* MDUI 和其他庫的引入 */
+		</style>
+		<link rel="stylesheet" href="/resources/webpage/mdui/mdui.css" />
+		<link rel="stylesheet" href="/resources/webpage/mdui/mdui-icons.css" />
+		<script src="/resources/webpage/mdui/mdui.js"></script>
+		<link rel="stylesheet" href="/resources/webpage/stylesheets/fenyibox.css" />
+	</head>
+	<body>
+		<mdui-top-app-bar>
+			<mdui-button-icon icon="menu"></mdui-button-icon>
+			<mdui-top-app-bar-title>幫助文檔</mdui-top-app-bar-title>
+		</mdui-top-app-bar>
+
+		<div class="main-container">
+			<!-- 目錄的新容器 -->
+			<div id="toc-container">
+				<h3>目錄</h3>
+				<ul id="toc"></ul>
+			</div>
+
+			<!-- 現有的內容容器 -->
+			<div id="content"></div>
+		</div>
+
+		<!-- 新增內容預覽視窗 -->
+		<div id="preview-container"></div>
+
+		<script>
+			/**
+			 * Helper function to sanitize the input string to prevent path traversal.
+			 * @param {string} input The filename to sanitize.
+			 * @returns {string} The sanitized filename.
+			 */
+			function sanitizeInput(input) {
+				return input.replace(/[^a-zA-Z0-9_\/-]/g, "");
+			}
+
+			/**
+			 * Helper function to get a query parameter from the URL.
+			 * @param {string} param The name of the parameter.
+			 * @returns {string|null} The value of the parameter or null.
+			 */
+			function getQueryParam(param) {
+				const urlParams = new URLSearchParams(window.location.search);
+				return urlParams.get(param);
+			}
+
+			/**
+			 * Generates a slug from a given string for use in anchor links.
+			 * @param {string} text The heading text.
+			 * @returns {string} A URL-friendly slug.
+			 */
+			function slugify(text) {
+				return text
+					.toString()
+					.toLowerCase()
+					.replace(/\s+/g, "-") // Replace spaces with -
+					.replace(/[^\w-]+/g, "") // Remove all non-word chars
+					.replace(/--+/g, "-") // Replace multiple - with single -
+					.replace(/^-+/, "") // Trim - from start of text
+					.replace(/-+$/, ""); // Trim - from end of text
+			}
+
+			const previewContainer = document.getElementById("preview-container");
+			let hoverTimeout;
+
+			/**
+			 * 顯示內容預覽視窗
+			 * @param {string} docPath The path to the Markdown file.
+			 * @param {number} x The x-coordinate for the preview position.
+			 * @param {number} y The y-coordinate for the preview position.
+			 */
+			function showPreview(docPath, x, y) {
+				fetch(docPath)
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error("Document not found");
+						}
+						return response.text();
+					})
+					.then((markdown) => {
+						// 渲染整個 Markdown 內容到預覽視窗
+						const renderedFullMarkdown = marked.parse(markdown);
+						previewContainer.innerHTML = renderedFullMarkdown;
+
+						// 根據滑鼠位置定位預覽視窗
+						const viewportWidth = window.innerWidth;
+						const previewWidth = previewContainer.offsetWidth;
+
+						// 確保預覽視窗不會超出視窗右側
+						const left = x + previewWidth + 20 > viewportWidth ? x - previewWidth - 20 : x + 20;
+
+						previewContainer.style.left = `${left}px`;
+						previewContainer.style.top = `${y + 20}px`;
+						previewContainer.style.display = "block";
+						// 使用過渡效果顯示
+						setTimeout(() => {
+							previewContainer.style.opacity = 1;
+						}, 10);
+					})
+					.catch((error) => {
+						console.error("Error fetching preview:", error);
+						// 隱藏預覽視窗
+						hidePreview();
+					});
+			}
+
+			/**
+			 * 隱藏內容預覽視窗
+			 */
+			function hidePreview() {
+				clearTimeout(hoverTimeout);
+				previewContainer.style.opacity = 0;
+				// 在過渡結束後隱藏元素，以節省資源
+				setTimeout(() => {
+					previewContainer.style.display = "none";
+				}, 200);
+			}
+
+			/**
+			 * Loads and renders the Markdown content, then generates a table of contents and adds preview listeners.
+			 */
+			function loadMarkdown() {
+				var fileName = getQueryParam("doc");
+				if (!fileName) {
+					fileName = "index";
+				}
+				const sanitizedFileName = sanitizeInput(fileName);
+				if (sanitizedFileName !== fileName) {
+					document.getElementById("content").innerHTML = `<p>錯誤：文檔名稱非法。</p>`;
+					return;
+				}
+
+				fetch(sanitizedFileName + ".md")
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error("沒有找到該文檔。");
+						}
+						return response.text();
+					})
+					.then((data) => {
+						// Use marked.js to convert Markdown to HTML
+						const renderedMarkdown = marked.parse(data);
+						const contentElement = document.getElementById("content");
+						contentElement.innerHTML = renderedMarkdown;
+
+						// Generate the Table of Contents (TOC)
+						const tocElement = document.getElementById("toc");
+						tocElement.innerHTML = ""; // Clear any previous TOC
+						const headings = contentElement.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+						let tocHtml = "";
+						headings.forEach((heading, index) => {
+							// Create a unique ID for each heading
+							const headingId = `toc-heading-${slugify(heading.textContent)}-${index}`;
+							heading.id = headingId;
+
+							// Get the level of the heading (h1, h2, etc.) for styling
+							const level = parseInt(heading.tagName.charAt(1));
+
+							// Create the TOC link with appropriate indentation
+							const paddingLeft = (level - 1) * 1.5; // Indent based on heading level
+							tocHtml += `
+                                <li>
+                                    <a href="#${headingId}" style="padding-left: ${paddingLeft}rem;">${heading.textContent}</a>
+                                </li>
+                            `;
+						});
+
+						tocElement.innerHTML = tocHtml;
+
+						// Add MDUI and FenyiBox classes to the rendered elements
+						const links = contentElement.querySelectorAll("a");
+						links.forEach((link) => {
+							link.classList.add("fenyi-link");
+
+							// 檢查連結是否符合 /user-doc/index.html?doc= 的格式
+							const url = new URL(link.href);
+							if (url.pathname.endsWith("index.html") && url.searchParams.has("doc")) {
+								const docName = url.searchParams.get("doc");
+								const docPath = sanitizeInput(docName) + ".md";
+
+								link.addEventListener("mouseenter", (event) => {
+									clearTimeout(hoverTimeout);
+									hoverTimeout = setTimeout(() => {
+										showPreview(docPath, event.clientX, event.clientY);
+									}, 500); // 延遲500毫秒顯示預覽
+								});
+								link.addEventListener("mouseleave", () => {
+									// 延遲隱藏，但當滑鼠移到預覽框上時會取消
+									hoverTimeout = setTimeout(hidePreview, 300);
+								});
+							}
+						});
+
+						// 為預覽框添加事件監聽器，防止在滾動時隱藏
+						previewContainer.addEventListener("mouseenter", () => {
+							clearTimeout(hoverTimeout);
+						});
+						previewContainer.addEventListener("mouseleave", () => {
+							hidePreview();
+						});
+
+						const tables = contentElement.querySelectorAll("table");
+						tables.forEach((table) => {
+							table.classList.add("mdui-table");
+						});
+					})
+					.catch((error) => {
+						console.error("Error loading the file:", error);
+						document.getElementById("content").innerHTML = `<p>錯誤：${error.message}</p>`;
+					});
+			}
+
+			// Load the markdown document and generate the TOC when the page loads
+			window.onload = loadMarkdown;
+			/*
+			// Optional: Handle window resize to adjust layout
+			window.addEventListener("resize", () => {
+				// This is where you would handle more complex responsive logic if needed,
+				// but CSS Grid handles most of it now.
+			});*/
+		</script>
+	</body>
+</html>
